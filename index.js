@@ -29,7 +29,7 @@ async function run() {
     await octokit.rest.issues.update({
       ...gh.context.issue,
       issue_number: gh.context.issue.number,
-      title: commentBody.slice(commentBody.indexOf(':')),
+      title: commentBody.slice(commentBody.indexOf(':')+2, commentBody.indexOf(']')),
       number: undefined
     })
   } catch (error) {
