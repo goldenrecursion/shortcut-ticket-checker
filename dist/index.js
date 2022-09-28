@@ -9671,6 +9671,8 @@ const gh = __nccwpck_require__(5438);
 // most @actions toolkit packages have async methods
 async function run() {
   try {
+    core.debug("START DEBUG")
+    core.debug(core.getInput('token'))
     const octokit = gh.getOctokit(core.getInput('token'));
     const shortcutComments = [];
     for await (const {data: comments} of octokit.paginate.iterator(
