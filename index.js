@@ -2,9 +2,9 @@ const core = require('@actions/core');
 const gh = require('@actions/github');
 
 // most @actions toolkit packages have async methods
-async function run(inputs) {
+async function run() {
   try {
-    const octokit = gh.getOctokit(inputs.token);
+    const octokit = gh.getOctokit(core.getInput('token'));
     const shortcutComments = [];
     for await (const {data: comments} of octokit.paginate.iterator(
       octokit.rest.issues.listComments,
@@ -18,7 +18,7 @@ async function run(inputs) {
     }
 
     if (shortcutComments.length > 1) core.setFailed("More than one shortcut comment found!  Split your PR.")
-    
+
     const commentBody = shortcutComments[0].body;
 
     await octokit.rest.issues.update({
