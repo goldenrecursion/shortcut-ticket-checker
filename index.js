@@ -1,18 +1,30 @@
 const core = require('@actions/core');
-const wait = require('./wait');
-
+const gh = require('@actions/github');
 
 // most @actions toolkit packages have async methods
-async function run() {
+async function run(inputs) {
   try {
-    const ms = core.getInput('milliseconds');
-    core.info(`Waiting ${ms} milliseconds ...`);
+    const octokit = gh.getOctokit(inputs.token);
+    const shortcutComments = [];
+    for await (const {data: comments} of octokit.paginate.iterator(
+      octokit.rest.issues.listComments,
+      {
+        ...gh.context.issue,
+      }
+    )) {
+      shortcutComments.push(...comments.filter(comment =>
+        comment.user.login === 'shortcut-integration'
+      ))
+    }
 
-    core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-    await wait(parseInt(ms));
-    core.info((new Date()).toTimeString());
+    if (shortcutComments.length > 1) core.setFailed("More than one shortcut comment found!  Split your PR.")
+    
+    const commentBody = shortcutComments[0].body;
 
-    core.setOutput('time', new Date().toTimeString());
+    await octokit.rest.issues.update({
+      ...gh.context.issue,
+      title: commentBody.slice(commentBody.indexOf(':'))
+    })
   } catch (error) {
     core.setFailed(error.message);
   }
