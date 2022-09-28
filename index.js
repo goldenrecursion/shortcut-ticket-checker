@@ -17,7 +17,7 @@ async function run() {
       }
     )) {
       shortcutComments.push(...comments.filter(comment =>
-        comment.user.login === 'shortcut-integration'
+        comment.user.login === 'shortcut-integration[bot]'
       ))
     }
 
