@@ -9679,6 +9679,8 @@ async function run() {
       octokit.rest.issues.listComments,
       {
         ...gh.context.issue,
+        issue_number: gh.context.issue.number,
+        number: undefined
       }
     )) {
       shortcutComments.push(...comments.filter(comment =>
@@ -9693,7 +9695,9 @@ async function run() {
 
     await octokit.rest.issues.update({
       ...gh.context.issue,
-      title: commentBody.slice(commentBody.indexOf(':'))
+      issue_number: gh.context.issue.number,
+      title: commentBody.slice(commentBody.indexOf(':')),
+      number: undefined
     })
   } catch (error) {
     core.debug(error)
