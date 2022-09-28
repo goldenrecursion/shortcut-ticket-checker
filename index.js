@@ -18,6 +18,7 @@ async function run() {
     }
 
     if (shortcutComments.length > 1) core.setFailed("More than one shortcut comment found!  Split your PR.")
+    if (shortcutComments.length < 1) core.setFailed("No shortcut ticket found!")
 
     const commentBody = shortcutComments[0].body;
 
