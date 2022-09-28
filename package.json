@@ -29,7 +29,7 @@
     "@actions/github": "^5"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.31",
+    "@vercel/ncc": "^0.34",
     "eslint": "^8",
     "jest": "^27"
   }
