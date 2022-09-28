@@ -9696,6 +9696,7 @@ async function run() {
       title: commentBody.slice(commentBody.indexOf(':'))
     })
   } catch (error) {
+    core.debug(error)
     core.setFailed(error.message);
   }
 }
